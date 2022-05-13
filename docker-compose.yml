@@ -1,0 +1,25 @@
+version: '3.3'
+
+services:
+  db:
+    image: postgres
+    restart: always
+    container_name: image-shop-db
+    environment:
+      POSTGRES_DB: image-shop-db
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: shopify
+    volumes:
+      - ./db-scripts/1-roles.sql:/docker-entrypoint-initdb.d/1-roles.sql
+    ports:
+      - '5432:5432'
+
+  safe-chat-api:
+    image: safwachyece/safe-chat-api:latest
+    container_name: safe-chat-api
+    environment:
+      DB_URL: "jdbc:postgresql://${DOCKER_GATEWAY_HOST:-host.docker.internal}:5432/postgres"
+      DB_USER: dev_rw
+      DB_PASS: dev_database_passwd
+    ports:
+      - '8080:8080'
