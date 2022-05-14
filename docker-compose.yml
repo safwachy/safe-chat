@@ -4,11 +4,11 @@ services:
   db:
     image: postgres
     restart: always
-    container_name: image-shop-db
+    container_name: safe-chat-db
     environment:
-      POSTGRES_DB: image-shop-db
+      POSTGRES_DB: safe-chat-db
       POSTGRES_USER: admin
-      POSTGRES_PASSWORD: shopify
+      POSTGRES_PASSWORD: Qw@123456
     volumes:
       - ./db-scripts/1-roles.sql:/docker-entrypoint-initdb.d/1-roles.sql
     ports:
@@ -23,3 +23,7 @@ services:
       DB_PASS: dev_database_passwd
     ports:
       - '8080:8080'
+    # container will start at the same time as db container, therefore connection
+    # attempts will fail and container will stop, in this case we restart the container until
+    # the api container can successfully connect to the db
+    restart: on-failure

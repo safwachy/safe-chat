@@ -5,7 +5,7 @@ import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.`java-time`.timestamp
 
 object Room : Table() {
-    val id = uuid("id")
+    val id = uuid("id").uniqueIndex()
     val roomCode = varchar("room_code", ROOM_CODE_LENGTH)
     val createdDate = timestamp("created_date")
 

@@ -1,6 +1,5 @@
 package com.safwachy.safechat.controller
 
-import com.safwachy.safechat.model.RoomModel
 import com.safwachy.safechat.model.UserDetail
 import com.safwachy.safechat.service.RoomService
 import com.safwachy.safechat.service.UserService
@@ -21,19 +20,20 @@ class RoomControllerImpl (
     private val roomService: RoomService,
     private val userService: UserService
 ): RoomController {
-    @PostMapping("/room/{roomCode}")
+    @PostMapping(value = ["/room/{roomCode}", "/room", "/room/"])
     override fun join(
         @PathVariable(required = false) roomCode: String?,
         @RequestBody userDetail: UserDetail
     ): ResponseEntity<Map<String, String>> {
+        // create user
+        val user = userService.create(userDetail.user, roomCode)
+
         // create room if necessary
         val room = if (roomCode == null) roomService.create() else roomService.findByCode(roomCode)
-
-        // create user
-        val user = userService.create(userDetail.user)
+        if (room.roomCode == null) throw IllegalArgumentException("Room Code should not be null")
 
         // add the user to the room
-        roomService.addUser(room, user)
+        userService.updateRoom(user, room)
 
         // create JWT
         val jwt = "12345"
@@ -44,8 +44,6 @@ class RoomControllerImpl (
             .path("/")
             .maxAge(86400)
             .build()
-
-        if (room.roomCode == null) throw IllegalStateException("Room Code should not be null")
 
         val body = mapOf(
             "roomCode" to room.roomCode

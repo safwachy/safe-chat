@@ -28,7 +28,7 @@ class RoomRepositoryImpl : RoomRepository {
                 }
             }
         } else {
-            throw IllegalStateException("Invalid state of RoomModel")
+            throw IllegalArgumentException("Invalid state of RoomModel")
         }
     }
 
@@ -43,6 +43,7 @@ class RoomRepositoryImpl : RoomRepository {
         transaction {
             TransactionManager.current().exec(sql) {
                 if (!it.isBeforeFirst) throw ResourceNotFoundException("Could not find a room with code: $roomCode")
+                it.next()
                 room = RoomModel(
                     UUID.fromString(it.getString("id")),
                     it.getString("room_code"),

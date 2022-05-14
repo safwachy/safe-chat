@@ -6,14 +6,20 @@ import java.util.*
 
 data class UserModel(
     @JsonProperty("id")
-    val id : UUID,
+    var id : UUID?,
 
     @JsonProperty("roomId")
     var roomId : UUID?,
 
     @JsonProperty("name")
-    val name : String,
+    var name : String?,
 
     @JsonProperty("createdDate")
-    val createdDate : LocalDateTime?,
-)
+    var createdDate : LocalDateTime?,
+) {
+    constructor() : this(null, null, null, null)
+
+    companion object {
+        const val MAX_USER_NAME_LENGTH = 50
+    }
+}

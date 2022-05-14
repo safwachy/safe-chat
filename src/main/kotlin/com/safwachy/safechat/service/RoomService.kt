@@ -10,7 +10,6 @@ import java.util.*
 
 interface RoomService {
     fun create() : RoomModel
-    fun addUser(room: RoomModel, user: UserModel)
     fun findByCode(roomCode: String) : RoomModel
 }
 
@@ -22,10 +21,6 @@ class RoomServiceImpl (
         val room = RoomModel(UUID.randomUUID(), RandomStringUtils.randomAlphanumeric(RoomModel.ROOM_CODE_LENGTH), LocalDateTime.now())
         roomRepository.createRoom(room)
         return room
-    }
-
-    override fun addUser(room: RoomModel, user: UserModel) {
-        user.roomId = room.id
     }
 
     override fun findByCode(roomCode: String): RoomModel {
