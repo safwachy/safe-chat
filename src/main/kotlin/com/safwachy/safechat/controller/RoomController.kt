@@ -1,5 +1,6 @@
 package com.safwachy.safechat.controller
 
+import com.safwachy.safechat.model.RestResult
 import com.safwachy.safechat.model.UserDetail
 import com.safwachy.safechat.service.RoomService
 import com.safwachy.safechat.service.UserService
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
 interface RoomController {
-    fun join(roomCode: String?, userDetail: UserDetail) : ResponseEntity<Map<String, String>>
+    fun join(roomCode: String?, userDetail: UserDetail) : ResponseEntity<RestResult>
 }
 
 @RestController
@@ -24,7 +25,7 @@ class RoomControllerImpl (
     override fun join(
         @PathVariable(required = false) roomCode: String?,
         @RequestBody userDetail: UserDetail
-    ): ResponseEntity<Map<String, String>> {
+    ): ResponseEntity<RestResult> {
         // create user
         val user = userService.create(userDetail.user, roomCode)
 
@@ -38,16 +39,16 @@ class RoomControllerImpl (
         // create JWT
         val jwt = "12345"
 
-        val cookie = ResponseCookie.from("auth-token", jwt)
+        val cookie = ResponseCookie.from("auth", jwt)
             .httpOnly(true)
             .secure(true)
             .path("/")
             .maxAge(86400)
             .build()
 
-        val body = mapOf(
+        val body = RestResult(mapOf(
             "roomCode" to room.roomCode
-        )
+        ))
 
         return ResponseEntity
             .ok()

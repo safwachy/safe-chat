@@ -12,13 +12,13 @@ import java.time.ZoneOffset
 import java.util.*
 
 interface RoomRepository {
-    fun createRoom(room: RoomModel)
+    fun insertRoom(room: RoomModel)
     fun findByCode(roomCode: String) : RoomModel
 }
 
 @Repository
 class RoomRepositoryImpl : RoomRepository {
-    override fun createRoom(room: RoomModel) {
+    override fun insertRoom(room: RoomModel) {
         if (room.id != null && room.roomCode != null && room.createdDate != null) {
             transaction {
                 Room.insert {

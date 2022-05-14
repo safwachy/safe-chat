@@ -12,6 +12,7 @@ import java.util.*
 interface UserService {
     fun create(userName: String, roomCode: String?) : UserModel
     fun updateRoom(user: UserModel, room: RoomModel)
+    fun findByUserNameAndRoomCode(userName: String, roomCode: String) : UserModel
 }
 
 @Service
@@ -20,15 +21,14 @@ class UserServiceImpl (
     private val roomRepository: RoomRepository
 ): UserService {
     override fun create(userName: String, roomCode: String?) : UserModel {
-        if (userName.isEmpty() || userName.length > UserModel.MAX_USER_NAME_LENGTH) {
-            throw ValidationException("Invalid length for user name, must be 50 characters or less")
+        if (userName.isEmpty() || userName.length > UserModel.MAX_USER_NAME_CHAR_LENGTH) {
+            throw ValidationException("Invalid length for user name, must be 50 characters or less and non-empty")
         }
-        if (roomCode != null) {
-            val room = roomRepository.findByCode(roomCode)
-            if (userRepository.findByUserNameAndRoomId(userName, room.id!!).id != null) throw ValidationException("A user with that name already exists, please pick a different name")
+        if (roomCode != null && findByUserNameAndRoomCode(userName, roomCode).id != null) {
+            throw ValidationException("A user with that name already exists, please pick a different name")
         }
         val user = UserModel(UUID.randomUUID(), null, userName, LocalDateTime.now())
-        userRepository.createUser(user)
+        userRepository.insertUser(user)
         return user
     }
 
@@ -36,5 +36,10 @@ class UserServiceImpl (
         if (room.id == null && user.id == null) throw IllegalArgumentException("Room UUID cannot be null")
         user.roomId = room.id
         userRepository.updateUserRoomId(user.id!!, room.id!!)
+    }
+
+    override fun findByUserNameAndRoomCode(userName: String, roomCode: String) : UserModel {
+        val room = roomRepository.findByCode(roomCode)
+        return userRepository.findByUserNameAndRoomId(userName, room.id!!)
     }
 }

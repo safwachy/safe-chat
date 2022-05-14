@@ -13,14 +13,14 @@ import java.time.ZoneOffset
 import java.util.*
 
 interface UserRepository {
-    fun createUser(user: UserModel)
+    fun insertUser(user: UserModel)
     fun updateUserRoomId(userId: UUID, roomId: UUID)
     fun findByUserNameAndRoomId(userName: String, roomId: UUID) : UserModel
 }
 
 @Repository
 class UserRepositoryImpl : UserRepository {
-    override fun createUser(user: UserModel) {
+    override fun insertUser(user: UserModel) {
         if (user.id != null && user.name != null && user.createdDate != null) {
             transaction {
                 User.insert {

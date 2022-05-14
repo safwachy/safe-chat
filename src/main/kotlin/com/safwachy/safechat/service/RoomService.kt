@@ -19,7 +19,7 @@ class RoomServiceImpl (
 ) : RoomService {
     override fun create(): RoomModel {
         val room = RoomModel(UUID.randomUUID(), RandomStringUtils.randomAlphanumeric(RoomModel.ROOM_CODE_LENGTH), LocalDateTime.now())
-        roomRepository.createRoom(room)
+        roomRepository.insertRoom(room)
         return room
     }
 

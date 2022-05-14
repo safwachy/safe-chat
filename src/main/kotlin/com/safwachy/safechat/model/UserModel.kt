@@ -20,6 +20,6 @@ data class UserModel(
     constructor() : this(null, null, null, null)
 
     companion object {
-        const val MAX_USER_NAME_LENGTH = 50
+        const val MAX_USER_NAME_CHAR_LENGTH = 50
     }
 }
