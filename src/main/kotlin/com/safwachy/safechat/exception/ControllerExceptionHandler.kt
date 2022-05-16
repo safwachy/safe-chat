@@ -1,5 +1,6 @@
 package com.safwachy.safechat.exception
 
+import com.safwachy.safechat.helper.DateTimeUtil
 import com.safwachy.safechat.model.ErrorDetail
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -7,8 +8,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.context.request.ServletWebRequest
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler
-import java.time.Instant
-import java.time.format.DateTimeFormatter
 import java.util.logging.Logger
 
 @ControllerAdvice
@@ -17,7 +16,7 @@ class ControllerExceptionHandler : ResponseEntityExceptionHandler() {
     fun handleNotFound(ex : RuntimeException, req : ServletWebRequest) : ResponseEntity<ErrorDetail> {
         LOG.info("404 Exception: ${ex.printStackTrace()}")
         val errorDetails = ErrorDetail(
-            DateTimeFormatter.ISO_INSTANT.format(Instant.now()),
+            DateTimeUtil.formatCurrentDateTime(),
             HttpStatus.NOT_FOUND.value(),
             HttpStatus.NOT_FOUND.name,
             ex.message,
@@ -29,7 +28,7 @@ class ControllerExceptionHandler : ResponseEntityExceptionHandler() {
     fun handleBadRequest(ex : RuntimeException, req : ServletWebRequest) : ResponseEntity<ErrorDetail> {
         LOG.info("400 Exception: ${ex.printStackTrace()}")
         val errorDetails = ErrorDetail(
-            DateTimeFormatter.ISO_INSTANT.format(Instant.now()),
+            DateTimeUtil.formatCurrentDateTime(),
             HttpStatus.BAD_REQUEST.value(),
             HttpStatus.BAD_REQUEST.name,
             ex.message,
@@ -41,7 +40,7 @@ class ControllerExceptionHandler : ResponseEntityExceptionHandler() {
     fun handleInternalServerError(ex : RuntimeException, req : ServletWebRequest) : ResponseEntity<ErrorDetail> {
         LOG.info("500 Exception: ${ex.printStackTrace()}")
         val errorDetails = ErrorDetail(
-            DateTimeFormatter.ISO_INSTANT.format(Instant.now()),
+            DateTimeUtil.formatCurrentDateTime(),
             HttpStatus.INTERNAL_SERVER_ERROR.value(),
             HttpStatus.INTERNAL_SERVER_ERROR.name,
             "Something went wrong",

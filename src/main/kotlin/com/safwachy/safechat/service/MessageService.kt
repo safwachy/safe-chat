@@ -1,9 +1,7 @@
 package com.safwachy.safechat.service
 
 import com.safwachy.safechat.exception.ValidationException
-import com.safwachy.safechat.model.MessageDetail
-import com.safwachy.safechat.model.MessageModel
-import com.safwachy.safechat.model.UserModel
+import com.safwachy.safechat.model.*
 import com.safwachy.safechat.repository.MessageRepository
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
@@ -11,6 +9,7 @@ import java.util.UUID
 
 interface MessageService {
     fun postMessage(user: UserModel, messageBody: String) : MessageModel
+    fun getMessage(room: RoomModel, lastMessageDateTime: LocalDateTime?) : List<MessageResult>
 }
 
 @Service
@@ -24,5 +23,15 @@ class MessageServiceImpl (
         val message = MessageModel(UUID.randomUUID(), user.id!!, user.roomId!!, messageBody, LocalDateTime.now())
         messageRepository.insertMessage(message)
         return message
+    }
+
+    override fun getMessage(room: RoomModel, lastMessageDateTime: LocalDateTime?): List<MessageResult> {
+        if (room.id == null) {
+            throw IllegalArgumentException("Room UUID cannot be null")
+        }
+        if (lastMessageDateTime == null) {
+            return messageRepository.findAllByRoomId(room.id)
+        }
+        return messageRepository.findAllRecentByRoomId(room.id, lastMessageDateTime)
     }
 }
