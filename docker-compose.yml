@@ -21,6 +21,7 @@ services:
       DB_URL: "jdbc:postgresql://${DOCKER_GATEWAY_HOST:-host.docker.internal}:5432/postgres"
       DB_USER: dev_rw
       DB_PASS: dev_database_passwd
+      BASE64_SALT: "cFRibGcwZGRHT2NLczlINw=="
     ports:
       - '8080:8080'
     # container will start at the same time as db container, therefore connection

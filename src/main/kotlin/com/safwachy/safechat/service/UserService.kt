@@ -1,6 +1,7 @@
 package com.safwachy.safechat.service
 
 import com.safwachy.safechat.exception.ValidationException
+import com.safwachy.safechat.helper.SecurityUtil
 import com.safwachy.safechat.model.RoomModel
 import com.safwachy.safechat.model.UserModel
 import com.safwachy.safechat.repository.RoomRepository
@@ -39,7 +40,7 @@ class UserServiceImpl (
     }
 
     override fun findByUserNameAndRoomCode(userName: String, roomCode: String) : UserModel {
-        val room = roomRepository.findByCode(roomCode)
+        val room = roomRepository.findByCode(SecurityUtil.sha256Hash(roomCode))
         return userRepository.findByUserNameAndRoomId(userName, room.id!!)
     }
 }

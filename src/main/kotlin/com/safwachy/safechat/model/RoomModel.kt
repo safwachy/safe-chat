@@ -9,7 +9,7 @@ data class RoomModel(
     val id : UUID?,
 
     @JsonProperty("roomCode")
-    val roomCode : String?,
+    var roomCode : String?,
 
     @JsonProperty("createdDate")
     val createdDate : LocalDateTime?,
@@ -17,6 +17,6 @@ data class RoomModel(
     constructor() : this(null, null, null)
 
     companion object {
-        const val ROOM_CODE_LENGTH = 8
+        const val ROOM_CODE_LENGTH = 20
     }
 }

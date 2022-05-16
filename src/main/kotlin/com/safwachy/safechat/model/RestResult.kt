@@ -23,4 +23,11 @@ data class RestResult(
         HttpStatus.OK.value(),
         payload
     )
+
+    constructor() : this(
+        DateTimeUtil.formatCurrentDateTime(),
+        "SUCCESS",
+        HttpStatus.OK.value(),
+        emptyMap<String, String>()
+    )
 }

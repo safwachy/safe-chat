@@ -23,7 +23,7 @@ class RoomRepositoryImpl : RoomRepository {
             transaction {
                 Room.insert {
                     it[id] = room.id
-                    it[roomCode] = room.roomCode
+                    it[roomCode] = room.roomCode!!
                     it[createdDate] = room.createdDate.toInstant(ZoneOffset.UTC)
                 }
             }

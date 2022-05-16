@@ -10,7 +10,7 @@ data class MessageResult(
     val messageId: UUID,
 
     @JsonProperty("message")
-    val message: String,
+    var message: String,
 
     @JsonProperty("user")
     val user: String,

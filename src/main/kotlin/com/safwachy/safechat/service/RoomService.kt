@@ -1,5 +1,6 @@
 package com.safwachy.safechat.service
 
+import com.safwachy.safechat.helper.SecurityUtil
 import com.safwachy.safechat.model.RoomModel
 import com.safwachy.safechat.model.UserModel
 import com.safwachy.safechat.repository.RoomRepository
@@ -9,7 +10,7 @@ import java.time.LocalDateTime
 import java.util.*
 
 interface RoomService {
-    fun create() : RoomModel
+    fun create(newRoomCode: String) : RoomModel
     fun findByCode(roomCode: String) : RoomModel
 }
 
@@ -17,13 +18,15 @@ interface RoomService {
 class RoomServiceImpl (
     private val roomRepository: RoomRepository
 ) : RoomService {
-    override fun create(): RoomModel {
-        val room = RoomModel(UUID.randomUUID(), RandomStringUtils.randomAlphanumeric(RoomModel.ROOM_CODE_LENGTH), LocalDateTime.now())
+    override fun create(newRoomCode: String): RoomModel {
+        val hashedRoomCode = SecurityUtil.sha256Hash(newRoomCode)
+        val room = RoomModel(UUID.randomUUID(), hashedRoomCode, LocalDateTime.now())
         roomRepository.insertRoom(room)
         return room
     }
 
     override fun findByCode(roomCode: String): RoomModel {
-        return roomRepository.findByCode(roomCode)
+        val hashedRoomCode = SecurityUtil.sha256Hash(roomCode)
+        return roomRepository.findByCode(hashedRoomCode)
     }
 }

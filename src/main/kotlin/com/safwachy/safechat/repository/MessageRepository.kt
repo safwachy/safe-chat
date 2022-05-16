@@ -76,7 +76,7 @@ class MessageRepositoryImpl : MessageRepository {
                 m.created_date as created_date 
             from message m
             left join public.user u on m.creator_id = u.id
-            where m.room_id  =  '$roomId' and created_date > ${lastMessageDateTime.toInstant(ZoneOffset.UTC)}
+            where m.room_id  =  '$roomId' and m.created_date > '${lastMessageDateTime.toInstant(ZoneOffset.UTC)}'
             order by created_date asc
         """.trimIndent()
 

@@ -36,9 +36,8 @@ class MessageControllerImpl (
     ) : ResponseEntity<RestResult> {
         val user = userService.findByUserNameAndRoomCode(messageDetail.sender, messageDetail.roomCode)
         if (user.id == null) throw ResourceNotFoundException("User does not exist in room")
-        val messageModel = messageService.postMessage(user, messageDetail.message)
-        val body = RestResult(MessageResult(messageModel.id, messageModel.messageBody, user.name!!, messageModel.createdDate))
-        return ResponseEntity.ok(body)
+        messageService.postMessage(user, messageDetail.roomCode, messageDetail.message)
+        return ResponseEntity.ok(RestResult())
     }
 
     @GetMapping("/room/{roomCode}/message")
@@ -47,6 +46,7 @@ class MessageControllerImpl (
         @RequestParam(required = false) @DateTimeFormat(pattern = DateTimeUtil.DATE_TIME_FORMAT) lastMessageDateTime: LocalDateTime?
     ) : ResponseEntity<RestResult>{
         val room = roomService.findByCode(roomCode)
+        room.roomCode = roomCode
         val body = RestResult(messageService.getMessage(room, lastMessageDateTime))
         return ResponseEntity.ok(body)
     }
