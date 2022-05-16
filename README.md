@@ -27,7 +27,7 @@ Do NOT run this command if you are on WINDOWS or MAC
 export DOCKER_GATEWAY_HOST=172.17.0.1
 ```
 
-Run the following command at the root of the project to start the App (make sure that Docker is running in you machine).
+Run the following command at the root of the project to start the App (make sure that Docker is running in your machine).
 ```
 docker-compose up -d
 ```
@@ -35,7 +35,6 @@ docker-compose up -d
 To test that the services are working, go to http://localhost:8080/, you should see a welcome message.
 
 Now that the services are up and running, you can get started. \
-Luckily the database is already preloaded with seed data to make your life easier.
 
 If you want to stop the App you can do one the following:
 ```shell
