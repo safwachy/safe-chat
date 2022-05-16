@@ -47,23 +47,10 @@ class RoomControllerImpl (
         // add the user to the room
         userService.updateRoom(user, room)
 
-        // create JWT
-        val jwt = "12345"
-
-        val cookie = ResponseCookie.from("auth", jwt)
-            .httpOnly(true)
-            .secure(true)
-            .path("/")
-            .maxAge(86400)
-            .build()
-
         val body = RestResult(mapOf(
             "roomCode" to code
         ))
 
-        return ResponseEntity
-            .ok()
-            .header(HttpHeaders.SET_COOKIE, cookie.toString())
-            .body(body)
+        return ResponseEntity.ok(body)
     }
 }
