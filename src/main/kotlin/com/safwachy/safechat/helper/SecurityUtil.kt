@@ -36,7 +36,7 @@ class SecurityUtil {
                 cipher.init(Cipher.ENCRYPT_MODE, secretKey, ivParameterSpec)
                 return iv + ":" + Base64.getEncoder().encodeToString(cipher.doFinal(input.toByteArray(Charsets.UTF_8)))
             } catch (e: Exception) {
-                throw ValidationException("Could not decrypt message", e)
+                throw ValidationException("Could not encrypt message", e)
             }
         }
 
